@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 🛍️ EasyShop - Modern E-commerce Platform
 
 [![Next.js](https://img.shields.io/badge/Next.js-14.1.0-black?style=flat-square&logo=next.js)](https://nextjs.org/)
@@ -496,3 +497,6 @@ kubectl get svc nginx-ingress-ingress-nginx-controller -n ingress-nginx -o jsonp
 ![EasyShop Website Screenshot](./public/Deployed.png)
 
 ### Your project is now deployed.
+=======
+# E-commerce-update
+>>>>>>> 1dbeb25e77de507498ff14778236a46637841711

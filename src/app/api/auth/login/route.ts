@@ -2,9 +2,27 @@ import { type NextRequest, NextResponse } from "next/server";
 import { generateToken } from "@/lib/auth/utils";
 import dbConnect from "@/lib/db";
 import User from "@/lib/models/user";
+import { checkRateLimit, loginRateLimit } from "@/lib/rateLimit";
 
 export async function POST(request: NextRequest) {
 	try {
+		const rateLimit = await checkRateLimit(request, loginRateLimit);
+		if (!rateLimit.success) {
+			const retryAfter = Math.ceil((rateLimit.reset - Date.now()) / 1000);
+			return NextResponse.json(
+				{ error: "Too many login attempts. Please try again later." },
+				{
+					status: 429,
+					headers: {
+						"RateLimit-Limit": String(rateLimit.limit),
+						"RateLimit-Remaining": "0",
+						"RateLimit-Reset": String(Math.ceil(rateLimit.reset / 1000)),
+						"Retry-After": String(retryAfter),
+					},
+				},
+			);
+		}
+
 		await dbConnect();
 		const body = await request.json();
 		const { email, password } = body;
